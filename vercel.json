@@ -3,8 +3,6 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-  "env": {
-    "VITE_API_URL": "@vite_api_url"
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
+
