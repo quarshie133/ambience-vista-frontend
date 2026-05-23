@@ -6,12 +6,12 @@ import logo from '../../assets/logo.png';
 
 
 const navLinks = [
-  { label: 'About',    href: '#about'    },
-  { label: 'Services', href: '#services' },
-  { label: 'Process',  href: '#process'  },
-  { label: 'Gallery',  href: '#gallery'  },
-  { label: 'Impact',   href: '#impact'   },
-  { label: 'Contact',  href: '#contact'  },
+  { label: 'About',    to: '/about'    },
+  { label: 'Services', to: '/services' },
+  { label: 'Process',  to: '/process'  },
+  { label: 'Gallery',  to: '/gallery'  },
+  { label: 'Impact',   to: '/impact'   },
+  { label: 'Contact',  to: '/contact'  },
 ];
 
 export default function Navbar() {
@@ -27,11 +27,7 @@ export default function Navbar() {
 
   useEffect(() => { setMenuOpen(false); }, [location]);
 
-  const handleAnchor = (e, href) => {
-    e.preventDefault();
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    setMenuOpen(false);
-  };
+  const isActive = (to) => location.pathname === to;
 
   return (
     <>
@@ -58,36 +54,42 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* Desktop nav — centered links */}
+            {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-9">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(e) => handleAnchor(e, link.href)}
-                  className="overline transition-colors duration-300"
-                  style={{
-                    color: scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)',
-                    textDecoration: 'none',
-                  }}
-                  onMouseEnter={e => e.target.style.color = scrolled ? 'var(--text-primary)' : '#fff'}
-                  onMouseLeave={e => e.target.style.color = scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)'}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const active = isActive(link.to);
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    className="overline transition-colors duration-300"
+                    style={{
+                      color: active
+                        ? (scrolled ? 'var(--accent)' : '#fff')
+                        : (scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)'),
+                      textDecoration: 'none',
+                      borderBottom: active ? '1.5px solid var(--accent)' : '1.5px solid transparent',
+                      paddingBottom: '2px',
+                      transition: 'color 0.3s, border-color 0.3s',
+                    }}
+                    onMouseEnter={e => { if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-primary)' : '#fff'; }}
+                    onMouseLeave={e => { if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)'; }}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* CTA */}
             <div className="hidden lg:block">
-              <a
-                href="#contact"
-                onClick={(e) => handleAnchor(e, '#contact')}
+              <Link
+                to="/contact"
                 className={scrolled ? 'btn-ghost' : 'btn-ghost-white'}
                 style={{ padding: '0.625rem 1.5rem', fontSize: '0.68rem' }}
               >
                 Get in Touch
-              </a>
+              </Link>
             </div>
 
             {/* Mobile toggle */}
@@ -132,30 +134,43 @@ export default function Navbar() {
 
               {/* Nav links */}
               <nav className="flex flex-col px-8 py-8 gap-1 flex-1">
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    onClick={(e) => handleAnchor(e, link.href)}
-                    className="font-display"
-                    style={{ fontSize: '1.5rem', fontStyle: 'italic', fontWeight: 300, color: 'var(--text-primary)', textDecoration: 'none', padding: '0.75rem 0', borderBottom: '1px solid var(--border)', display: 'block' }}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, i) => {
+                  const active = isActive(link.to);
+                  return (
+                    <motion.div
+                      key={link.label}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <Link
+                        to={link.to}
+                        className="font-display"
+                        style={{
+                          fontSize: '1.5rem',
+                          fontStyle: 'italic',
+                          fontWeight: 300,
+                          color: active ? 'var(--accent)' : 'var(--text-primary)',
+                          textDecoration: 'none',
+                          padding: '0.75rem 0',
+                          borderBottom: '1px solid var(--border)',
+                          display: 'block',
+                        }}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
               </nav>
 
               <div className="px-8 pb-10">
-                <a
-                  href="#contact"
-                  onClick={(e) => handleAnchor(e, '#contact')}
+                <Link
+                  to="/contact"
                   className="btn-primary w-full justify-center"
                 >
                   Get in Touch
-                </a>
+                </Link>
               </div>
             </motion.div>
           </motion.div>

@@ -12,7 +12,7 @@ const services = [
   'Site Assessment',
 ];
 
-const scrollTo = (id) => document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+
 
 export default function Footer() {
   return (
@@ -58,14 +58,14 @@ export default function Footer() {
             <ul style={{ listStyle: 'none' }} className="space-y-3">
               {services.map((s) => (
                 <li key={s}>
-                  <button
-                    onClick={() => scrollTo('#services')}
-                    style={{ fontSize: '0.875rem', fontWeight: 400, color: 'rgba(255,255,255,0.48)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, transition: 'color 0.3s', fontFamily: "'DM Sans', sans-serif" }}
-                    onMouseEnter={e => e.target.style.color = '#fff'}
-                    onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.48)'}
+                  <Link
+                    to="/services"
+                    style={{ fontSize: '0.875rem', fontWeight: 400, color: 'rgba(255,255,255,0.48)', textDecoration: 'none', display: 'block', transition: 'color 0.3s', fontFamily: "'DM Sans', sans-serif" }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.48)'}
                   >
                     {s}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -95,13 +95,13 @@ export default function Footer() {
 
             {/* CTA */}
             <div className="mt-8">
-              <button
-                onClick={() => scrollTo('#contact')}
+              <Link
+                to="/contact"
                 className="btn-ghost-white"
                 style={{ padding: '0.75rem 1.75rem', fontSize: '0.68rem' }}
               >
                 Request an Assessment
-              </button>
+              </Link>
             </div>
           </div>
         </div>

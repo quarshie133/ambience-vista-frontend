@@ -96,7 +96,7 @@ export default function Gallery() {
   const nextImage = useCallback(() => setLightboxIndex(i => (i + 1) % filtered.length), [filtered.length]);
 
   return (
-    <section id="gallery" className="section-padding" style={{ background: 'var(--bg-dark)' }}>
+    <section id="gallery" className="section-padding" style={{ background: 'var(--bg-surface)' }}>
       <div className="container-site">
         {/* Header */}
         <motion.div
@@ -108,9 +108,9 @@ export default function Gallery() {
         >
           <div>
             <div className="overline-row mb-6">
-              <span className="overline" style={{ color: 'rgba(255,255,255,0.6)' }}>Our Work</span>
+              <span className="overline" style={{ color: 'var(--text-muted)' }}>Our Work</span>
             </div>
-            <h2 className="text-editorial-xl" style={{ color: '#fff' }}>
+            <h2 className="text-editorial-xl" style={{ color: 'var(--text-primary)' }}>
               Project Highlights
             </h2>
           </div>
@@ -123,7 +123,7 @@ export default function Gallery() {
                 onClick={() => setActiveCategory(cat)}
                 className="text-[11px] tracking-[0.2em] uppercase font-semibold transition-colors duration-300 relative pb-2 cursor-pointer"
                 style={{
-                  color: activeCategory === cat ? 'var(--accent)' : 'rgba(255,255,255,0.4)',
+                  color: activeCategory === cat ? 'var(--accent)' : 'var(--text-muted)',
                 }}
               >
                 {cat}
@@ -180,10 +180,10 @@ export default function Gallery() {
                   <span className="text-[10px] tracking-[0.2em] uppercase font-semibold text-accent mb-2">
                     {img.category}
                   </span>
-                  <h3 className="font-display italic text-lg lg:text-xl text-white font-light leading-snug transition-colors duration-300 group-hover:text-accent">
+                  <h3 className="font-display italic text-lg lg:text-xl font-light leading-snug transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
                     {img.title}
                   </h3>
-                  <p className="text-xs text-white/50 leading-relaxed mt-2">
+                  <p className="text-xs leading-relaxed mt-2" style={{ color: 'var(--text-muted)' }}>
                     {img.description}
                   </p>
                 </div>
