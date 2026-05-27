@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
 import { staggerContainer, defaultViewport } from '../../lib/animations';
 
-import procurementImg  from '../../assets/presentation.jpeg';
-import residentialImg  from '../../assets/room.jpeg';
-import commercialImg   from '../../assets/building.jpeg';
-import projectImg      from '../../assets/site2.jpeg';
-import prepImg         from '../../assets/before_after image.jpeg';
-import advisoryImg     from '../../assets/site.jpeg';
+import procurementImg from '../../assets/color wheel painting.jpeg';
+import residentialImg from '../../assets/room.jpeg';
+import commercialImg from '../../assets/building.jpeg';
+import projectImg from '../../assets/site2.jpeg';
+import prepImg from '../../assets/before_after image.jpeg';
+import advisoryImg from '../../assets/site.jpeg';
 
 const services = [
   {

@@ -2,12 +2,17 @@ import { motion } from 'framer-motion';
 import { staggerContainer, defaultViewport } from '../../lib/animations';
 import { GraduationCap, Users, Briefcase } from 'lucide-react';
 
+import educationImg from '../../assets/presentation.jpeg'; // woman presenting
+import equalityImg from '../../assets/workshop_seminar2.jpeg'; // woman painting
+import growthImg from '../../assets/Team3.jpeg'; // team on site
+
 const impacts = [
   {
     stat: 'SDG 4',
     icon: GraduationCap,
     label: 'Quality Education',
     color: '#E8724A',
+    image: educationImg,
     desc: 'Providing structured technical training and internship programmes for youth entering the painting trade — building industry-ready professionals.',
   },
   {
@@ -15,6 +20,7 @@ const impacts = [
     icon: Users,
     label: 'Gender Equality',
     color: '#C85A8A',
+    image: equalityImg,
     desc: 'Our Women in Colour Initiative creates dedicated pathways for women to build careers in the painting industry and achieve financial independence.',
   },
   {
@@ -22,6 +28,7 @@ const impacts = [
     icon: Briefcase,
     label: 'Decent Work & Growth',
     color: '#2E8B57',
+    image: growthImg,
     desc: 'Creating formal employment, fair wages, and professional development opportunities in a sector that has historically operated informally.',
   },
 ];
@@ -89,6 +96,28 @@ export default function Impact() {
                   overflow: 'hidden',
                 }}
               >
+                {/* Image */}
+                <div style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  borderRadius: '2px',
+                  aspectRatio: '16/10',
+                  marginBottom: '1.5rem',
+                  border: '1px solid var(--border)',
+                  background: 'var(--bg-surface)'
+                }}>
+                  <img
+                    src={item.image}
+                    alt={item.label}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center top'
+                    }}
+                  />
+                </div>
+
                 {/* SDG badge */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem' }}>
                   <div

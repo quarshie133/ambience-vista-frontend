@@ -15,14 +15,15 @@ import gallery8  from '../../assets/workshop_seminar1.jpeg';
 
 // ── New images ───────────────────────────────────────────────────────────────
 import gallery9  from '../../assets/image1.jpeg';
-import gallery10 from '../../assets/image2.jpeg';
+import gallery10 from '../../assets/4dd8bc2c-07e0-4e5e-bf29-9e96c1ad6230.jpg';
 import gallery11 from '../../assets/Team3.jpeg';
 import gallery12 from '../../assets/workshop_seminar2.jpeg';
 import gallery13 from '../../assets/workshop_seminar3.jpeg';
 import gallery14 from '../../assets/IMG_0281.JPG';
 import gallery15 from '../../assets/9b5fd63e-c960-4afe-9bc9-0d2bfebb83e1.jpg';
-import gallery16 from '../../assets/cec9d982-7bce-4a33-8e0c-a95643d0459a.jpg';
+import gallery16 from '../../assets/IMG_6309.jpg';
 import gallery17 from '../../assets/d23e6591-ed6c-4f9f-a2fa-ba543fe736d0.jpg';
+import gallery18 from '../../assets/image2.jpeg';
 
 const galleryImages = [
   {
@@ -96,6 +97,7 @@ const galleryImages = [
     title: 'Training in Action',
     alt: 'Workshop seminar with painting professionals',
     description: 'Interactive learning sessions that keep our team ahead of industry standards.',
+    objectPosition: 'center bottom',
   },
   {
     id: 13, src: gallery13, category: 'team',
@@ -117,15 +119,22 @@ const galleryImages = [
   },
   {
     id: 16, src: gallery16, category: 'process',
-    title: 'Application Mastery',
-    alt: 'Professional painting application in progress',
-    description: 'Skilled painters maintaining consistent coats and clean lines across every surface.',
+    title: 'Fleet Mobilization',
+    alt: 'Ambience Vista branded service vehicle on site',
+    description: 'Our branded logistics units ensure prompt arrival, safe transit of premium coatings, and efficient on-site setup.',
   },
   {
     id: 17, src: gallery17, category: 'commercial',
     title: 'Commercial Excellence',
     alt: 'Completed commercial painting project exterior',
     description: 'Professional coatings that protect, last, and reflect the brand they represent.',
+  },
+  {
+    id: 18, src: gallery18, category: 'team',
+    title: 'Women in Colour Initiative',
+    alt: 'A certified female painter from our inclusion programme',
+    description: 'Empowering women with technical skills and career pathways in professional painting.',
+    objectPosition: 'center bottom',
   },
 ];
 
@@ -171,7 +180,7 @@ function GalleryCard({ img, index, onClick }) {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            objectPosition: 'center top',
+            objectPosition: img.objectPosition || 'center top',
             display: 'block',
             transition: 'transform 0.65s cubic-bezier(0.22,1,0.36,1)',
           }}

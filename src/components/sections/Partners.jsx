@@ -1,18 +1,24 @@
 import { motion } from 'framer-motion';
 import { defaultViewport } from '../../lib/animations';
 
+import coralLogo from '../../assets/logos/coral.png';
+import duluxLogo from '../../assets/logos/Dulux.png';
+import archXenusLogo from '../../assets/logos/arch_xenus_logo.jpeg';
+import habikonLogo from '../../assets/logos/Habikon.png';
+import sugruLogo from '../../assets/logos/Sugru.png';
+import meldenLogo from '../../assets/logos/Melden_property.jpeg';
+
 const partners = [
-  { name: 'Coral Paints' },
-  { name: 'Dulux'        },
-  { name: 'Archxenus'   },
-  { name: 'Habikon'      },
-  { name: 'Sugru'        },
-  { name: 'Edd McCray'   },
-  { name: 'MELYTAS'      },
+  { name: 'Coral Paints', logo: coralLogo },
+  { name: 'Dulux', logo: duluxLogo },
+  { name: 'Archxenus', logo: archXenusLogo },
+  { name: 'Habikon', logo: habikonLogo },
+  { name: 'Sugru', logo: sugruLogo },
+  { name: 'Melden Property', logo: meldenLogo },
 ];
 
 // Duplicated for seamless infinite marquee
-const all = [...partners, ...partners, ...partners];
+const all = [...partners, ...partners, ...partners, ...partners];
 
 export default function Partners() {
   return (
@@ -48,18 +54,29 @@ export default function Partners() {
       </div>
 
       {/* Marquee */}
-      <div className="overflow-hidden" style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '1.5rem 0' }}>
-        <div className="flex animate-marquee" style={{ width: 'max-content' }}>
+      <div className="overflow-hidden" style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '2rem 0' }}>
+        <div className="flex animate-marquee items-center" style={{ width: 'max-content' }}>
           {all.map((p, i) => (
             <div
               key={i}
-              className="flex items-center gap-8 px-12"
-              style={{ flexShrink: 0 }}
+              style={{
+                flexShrink: 0,
+                padding: '0 3.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             >
-              <span className="font-display" style={{ fontSize: 'clamp(1.1rem,2vw,1.55rem)', fontWeight: 300, fontStyle: 'italic', color: 'var(--text-muted)', whiteSpace: 'nowrap', transition: 'color 0.3s' }}>
-                {p.name}
-              </span>
-              <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent)', flexShrink: 0, opacity: 0.5 }} />
+              <img
+                src={p.logo}
+                alt={p.name}
+                title={p.name}
+                style={{
+                  height: 'clamp(38px, 5.5vw, 48px)',
+                  width: 'auto',
+                  objectFit: 'contain',
+                }}
+              />
             </div>
           ))}
         </div>

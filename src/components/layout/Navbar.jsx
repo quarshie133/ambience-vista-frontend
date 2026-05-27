@@ -34,6 +34,8 @@ export default function Navbar() {
   }, [menuOpen]);
 
   const isActive = (to) => location.pathname === to;
+  const isHome = location.pathname === '/';
+  const showSolid = scrolled || isHome;
 
   return (
     <>
@@ -46,13 +48,13 @@ export default function Navbar() {
           height: '72px',
           display: 'flex',
           alignItems: 'center',
-          borderBottom: scrolled
+          borderBottom: showSolid
             ? '1px solid var(--border)'
             : '1px solid rgba(255,255,255,0.08)',
-          background: scrolled
+          background: showSolid
             ? 'rgba(245,243,239,0.96)'
             : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          backdropFilter: showSolid ? 'blur(12px)' : 'none',
           transition: 'background 0.4s ease, border-color 0.4s ease',
         }}
         initial={{ y: -100, opacity: 0 }}
@@ -70,7 +72,7 @@ export default function Navbar() {
                 style={{
                   height: '36px',
                   width: 'auto',
-                  filter: scrolled ? 'none' : 'brightness(0) invert(1)',
+                  filter: showSolid ? 'none' : 'brightness(0) invert(1)',
                   transition: 'filter 0.4s ease',
                 }}
               />
@@ -94,18 +96,18 @@ export default function Navbar() {
                     className="overline"
                     style={{
                       color: active
-                        ? (scrolled ? 'var(--accent)' : '#fff')
-                        : (scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)'),
+                        ? (showSolid ? 'var(--accent)' : '#fff')
+                        : (showSolid ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)'),
                       textDecoration: 'none',
                       borderBottom: active ? '1.5px solid var(--accent)' : '1.5px solid transparent',
                       paddingBottom: '2px',
                       transition: 'color 0.3s, border-color 0.3s',
                     }}
                     onMouseEnter={e => {
-                      if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-primary)' : '#fff';
+                      if (!active) e.currentTarget.style.color = showSolid ? 'var(--text-primary)' : '#fff';
                     }}
                     onMouseLeave={e => {
-                      if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)';
+                      if (!active) e.currentTarget.style.color = showSolid ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)';
                     }}
                   >
                     {link.label}
@@ -120,7 +122,7 @@ export default function Navbar() {
               <div className="lg-cta">
                 <Link
                   to="/contact"
-                  className={scrolled ? 'btn-ghost' : 'btn-ghost-white'}
+                  className={showSolid ? 'btn-ghost' : 'btn-ghost-white'}
                   style={{ padding: '0.625rem 1.5rem', fontSize: '0.68rem' }}
                 >
                   Get in Touch
@@ -134,7 +136,7 @@ export default function Navbar() {
                 aria-label={menuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={menuOpen}
                 style={{
-                  color: scrolled ? 'var(--text-primary)' : '#fff',
+                  color: showSolid ? 'var(--text-primary)' : '#fff',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',

@@ -98,7 +98,7 @@ export default function About() {
             </p>
 
             {/* Four pillars — clean list, Studio McGee style */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-7">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
               {[
                 { label: 'Structured Process',  desc: 'Defined methodology from assessment to handover.' },
                 { label: 'Technical Expertise', desc: 'Surface analysis, product selection, precision application.' },
@@ -106,9 +106,9 @@ export default function About() {
                 { label: 'Quality Assurance',   desc: 'Multi-stage inspections at every project phase.' },
               ].map((v) => (
                 <div key={v.label}>
-                  <div className="w-6 h-px mb-3" style={{ background: 'var(--accent)' }} />
-                  <p className="font-display" style={{ fontSize: '1.05rem', fontWeight: 400, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>{v.label}</p>
-                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{v.desc}</p>
+                  <div className="w-5 h-px mb-2.5" style={{ background: 'var(--accent)' }} />
+                  <p className="font-display" style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{v.label}</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{v.desc}</p>
                 </div>
               ))}
             </div>
