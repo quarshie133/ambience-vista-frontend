@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import posterImg from '../../assets/painting_image.jpeg';
 
 // Video lives in /public — served directly, never bundled
 const HERO_VIDEO = '/0_Paint_Painting.mp4';
@@ -43,6 +44,7 @@ export default function VideoHero({ label, title, description }) {
         loop
         playsInline
         preload="auto"
+        poster={posterImg}
         style={{
           position: 'absolute',
           inset: 0,

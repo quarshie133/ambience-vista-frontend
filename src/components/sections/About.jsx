@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer, defaultViewport } from '../../lib/animations';
 import aboutImg1 from '../../assets/group_image.jpeg';
 import aboutImg2 from '../../assets/team2.jpeg';
-import founderImg from '../../assets/founder.png';
+import founderImg from '../../assets/founder.jpg';
 
 const ABOUT_IMG_1 = aboutImg1;
 const ABOUT_IMG_2 = aboutImg2;
