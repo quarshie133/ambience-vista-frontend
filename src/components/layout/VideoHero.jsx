@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import posterImg from '../../assets/painting_image.jpeg';
+import posterImg from '../../assets/video_poster.jpg';
 
 // Video lives in /public — served directly, never bundled
 const HERO_VIDEO = '/0_Paint_Painting.mp4';
