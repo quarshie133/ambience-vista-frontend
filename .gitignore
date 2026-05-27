@@ -27,3 +27,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Large media files — do NOT commit these to git
+# Video files
+*.MOV
+*.mov
+*.MP4
+src/assets/*.mp4
+
+# HEIC image files (iOS format, not web-compatible)
+*.HEIC
+*.heic
+
+# Public folder videos (too large for git — host on CDN or Vercel asset)
+public/*.mp4
+public/*.MOV
+public/*.mov

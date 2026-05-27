@@ -2,8 +2,16 @@ import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import logo from '../../assets/logo.png';
 
+const navLinks = [
+  { label: 'About',   to: '/about'   },
+  { label: 'Services', to: '/services' },
+  { label: 'Process',  to: '/process'  },
+  { label: 'Gallery',  to: '/gallery'  },
+  { label: 'Impact',   to: '/impact'   },
+  { label: 'Contact',  to: '/contact'  },
+];
 
-const services = [
+const serviceLinks = [
   'Paint Advisory',
   'Residential Painting',
   'Commercial Painting',
@@ -12,39 +20,67 @@ const services = [
   'Site Assessment',
 ];
 
-
-
 export default function Footer() {
   return (
     <footer style={{ background: 'var(--bg-dark)', color: 'rgba(255,255,255,0.55)' }}>
 
-      {/* Main footer grid */}
-      <div className="container-site" style={{ paddingTop: '5rem', paddingBottom: '4rem' }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+      {/* ── Main grid ─────────────────────────────────────────────────────────── */}
+      <div
+        className="container-site"
+        style={{ paddingTop: 'clamp(3rem,8vw,5rem)', paddingBottom: 'clamp(2.5rem,6vw,4rem)' }}
+      >
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+            gap: 'clamp(2rem,5vw,3rem)',
+            alignItems: 'start',
+          }}
+        >
 
-          {/* Brand col */}
-          <div className="lg:col-span-4">
+          {/* Brand */}
+          <div>
             <img
               src={logo}
               alt="Ambience Vista"
-              style={{ height: '36px', width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.9, marginBottom: '1.5rem' }}
+              style={{
+                height: '36px',
+                width: 'auto',
+                filter: 'brightness(0) invert(1)',
+                opacity: 0.9,
+                marginBottom: '1.25rem',
+              }}
             />
-            <p style={{ fontSize: '0.875rem', lineHeight: 1.8, maxWidth: '280px', color: 'rgba(255,255,255,0.48)' }}>
-              Professional painting services built on structure, supervision, and quality control. Serving Greater Accra and across Ghana.
+            <p
+              style={{
+                fontSize: '0.875rem',
+                lineHeight: 1.85,
+                maxWidth: '280px',
+                color: 'rgba(255,255,255,0.45)',
+              }}
+            >
+              Professional painting services built on structure, supervision, and quality control.
+              Serving Greater Accra and across Ghana.
             </p>
             {/* Social icons */}
-            <div className="flex gap-4 mt-7">
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
               {[
-                { label: 'instagram', href: '#', icon: Instagram },
-                { label: 'facebook',  href: '#', icon: Facebook  },
-                { label: 'linkedin',  href: '#', icon: Linkedin  },
+                { label: 'Instagram', href: '#', icon: Instagram },
+                { label: 'Facebook',  href: '#', icon: Facebook  },
+                { label: 'LinkedIn',  href: '#', icon: Linkedin  },
               ].map(({ label, href, icon: Icon }) => (
                 <a
                   key={label}
                   href={href}
-                  style={{ color: 'rgba(255,255,255,0.35)', transition: 'color 0.3s', display: 'flex' }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}
+                  aria-label={label}
+                  style={{
+                    color: 'rgba(255,255,255,0.32)',
+                    transition: 'color 0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.32)')}
                 >
                   <Icon size={18} strokeWidth={1.5} />
                 </a>
@@ -52,17 +88,58 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services col */}
-          <div className="lg:col-span-3 lg:col-start-6">
-            <p className="overline mb-5" style={{ color: 'rgba(255,255,255,0.28)' }}>Services</p>
-            <ul style={{ listStyle: 'none' }} className="space-y-3">
-              {services.map((s) => (
+          {/* Pages */}
+          <div>
+            <p
+              className="overline"
+              style={{ color: 'rgba(255,255,255,0.28)', marginBottom: '1.25rem' }}
+            >
+              Pages
+            </p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              {navLinks.map(({ label, to }) => (
+                <li key={label}>
+                  <Link
+                    to={to}
+                    style={{
+                      fontSize: '0.875rem',
+                      color: 'rgba(255,255,255,0.48)',
+                      textDecoration: 'none',
+                      transition: 'color 0.3s',
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.48)')}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <p
+              className="overline"
+              style={{ color: 'rgba(255,255,255,0.28)', marginBottom: '1.25rem' }}
+            >
+              Services
+            </p>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              {serviceLinks.map((s) => (
                 <li key={s}>
                   <Link
                     to="/services"
-                    style={{ fontSize: '0.875rem', fontWeight: 400, color: 'rgba(255,255,255,0.48)', textDecoration: 'none', display: 'block', transition: 'color 0.3s', fontFamily: "'DM Sans', sans-serif" }}
-                    onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.48)'}
+                    style={{
+                      fontSize: '0.875rem',
+                      color: 'rgba(255,255,255,0.48)',
+                      textDecoration: 'none',
+                      transition: 'color 0.3s',
+                      fontFamily: "'DM Sans', sans-serif",
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.48)')}
                   >
                     {s}
                   </Link>
@@ -71,10 +148,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact col */}
-          <div className="lg:col-span-4 lg:col-start-9">
-            <p className="overline mb-5" style={{ color: 'rgba(255,255,255,0.28)' }}>Contact</p>
-            <div className="space-y-4">
+          {/* Contact */}
+          <div>
+            <p
+              className="overline"
+              style={{ color: 'rgba(255,255,255,0.28)', marginBottom: '1.25rem' }}
+            >
+              Contact
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {[
                 { icon: Phone,  text: '+233 55 000 0000',       href: 'tel:+233550000000' },
                 { icon: Mail,   text: 'info@ambiencevista.com', href: 'mailto:info@ambiencevista.com' },
@@ -83,53 +165,82 @@ export default function Footer() {
                 <a
                   key={text}
                   href={href}
-                  style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', fontSize: '0.875rem', color: 'rgba(255,255,255,0.48)', textDecoration: 'none', transition: 'color 0.3s' }}
-                  onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.48)'}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.65rem',
+                    fontSize: '0.875rem',
+                    color: 'rgba(255,255,255,0.48)',
+                    textDecoration: 'none',
+                    transition: 'color 0.3s',
+                    lineHeight: 1.5,
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.48)')}
                 >
-                  <Icon size={15} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--accent)' }} strokeWidth={1.5} />
+                  <Icon
+                    size={14}
+                    strokeWidth={1.5}
+                    style={{ flexShrink: 0, marginTop: '3px', color: 'var(--accent)' }}
+                  />
                   {text}
                 </a>
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="mt-8">
+            {/* CTA button */}
+            <div style={{ marginTop: '1.75rem' }}>
               <Link
                 to="/contact"
                 className="btn-ghost-white"
-                style={{ padding: '0.75rem 1.75rem', fontSize: '0.68rem' }}
+                style={{ padding: '0.7rem 1.5rem', fontSize: '0.68rem', display: 'inline-block' }}
               >
                 Request an Assessment
               </Link>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* ── Bottom bar ────────────────────────────────────────────────────────── */}
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="container-site" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-            <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.28)' }}>
-              © {new Date().getFullYear()} Ambience Vista. All rights reserved.
-            </p>
-            <div style={{ display: 'flex', gap: '2rem' }}>
-              {['Privacy Policy', 'Terms of Service'].map((label) => (
-                <a
-                  key={label}
-                  href="#"
-                  style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.28)', textDecoration: 'none', transition: 'color 0.3s' }}
-                  onMouseEnter={e => e.target.style.color = 'rgba(255,255,255,0.6)'}
-                  onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.28)'}
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
+        <div
+          className="container-site"
+          style={{
+            paddingTop: '1.25rem',
+            paddingBottom: '1.25rem',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '0.75rem',
+          }}
+        >
+          <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.28)' }}>
+            © {new Date().getFullYear()} Ambience Vista. All rights reserved.
+          </p>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+            {['Privacy Policy', 'Terms of Service'].map((label) => (
+              <a
+                key={label}
+                href="#"
+                style={{
+                  fontSize: '0.78rem',
+                  color: 'rgba(255,255,255,0.28)',
+                  textDecoration: 'none',
+                  transition: 'color 0.3s',
+                }}
+                onMouseEnter={e => (e.target.style.color = 'rgba(255,255,255,0.6)')}
+                onMouseLeave={e => (e.target.style.color = 'rgba(255,255,255,0.28)')}
+              >
+                {label}
+              </a>
+            ))}
           </div>
         </div>
       </div>
+
     </footer>
   );
 }

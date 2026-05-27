@@ -1,6 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import paintingVideo from '../../assets/0_Paint_Painting.mp4';
+
+// Video lives in /public — served directly, never bundled
+const HERO_VIDEO = '/0_Paint_Painting.mp4';
 
 /**
  * VideoHero — cinematic looping video banner using the local painting video.
@@ -50,7 +52,7 @@ export default function VideoHero({ label, title, description }) {
           objectPosition: 'center',
         }}
       >
-        <source src={paintingVideo} type="video/mp4" />
+        <source src={HERO_VIDEO} type="video/mp4" />
       </video>
 
       {/* Cinematic gradient overlay — light at top, heavy at bottom */}
