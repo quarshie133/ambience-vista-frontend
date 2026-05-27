@@ -39,7 +39,8 @@ src/assets/*.mp4
 *.HEIC
 *.heic
 
-# Public folder videos (too large for git — host on CDN or Vercel asset)
-public/*.mp4
+# Public folder videos — block most, but allow the hero video so Vercel can serve it
 public/*.MOV
 public/*.mov
+# Allow only the hero video (46MB — under GitHub's 100MB hard limit)
+!public/0_Paint_Painting.mp4
