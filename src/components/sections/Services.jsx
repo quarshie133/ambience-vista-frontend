@@ -1,198 +1,235 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { staggerContainer, defaultViewport } from '../../lib/animations';
-import { Plus, Minus, Brush, Home, Building2, Wrench, Layers, Search } from 'lucide-react';
 
-import procurementImg from '../../assets/presentation.jpeg';
-import residentialImg from '../../assets/room.jpeg';
-import commercialImg from '../../assets/building.jpeg';
-import projectImg from '../../assets/site2.jpeg';
-import prepImg from '../../assets/roller technique training.jpeg';
-import advisoryImg from '../../assets/color wheel painting.jpeg';
+import procurementImg  from '../../assets/presentation.jpeg';
+import residentialImg  from '../../assets/room.jpeg';
+import commercialImg   from '../../assets/building.jpeg';
+import projectImg      from '../../assets/site2.jpeg';
+import prepImg         from '../../assets/before_after image.jpeg';
+import advisoryImg     from '../../assets/site.jpeg';
 
 const services = [
   {
-    id: 1, icon: Search,
+    id: 1,
+    number: '01',
+    badge: 'Advisory',
     title: 'Paint Advisory & Procurement Support',
-    short: 'Expert guidance on the right paints, quantities, and procurement strategies to reduce waste and achieve optimal results.',
-    long: 'We provide comprehensive advisory on paint selection, specifications, and procurement. Our experts guide product selection, quantity calculation, and supplier negotiations to ensure quality while optimizing your budget. Stop guessing — let data and expertise drive your paint decisions.',
-    features: ['Paint specification consulting', 'Quantity estimation & optimization', 'Supplier recommendations', 'Budget optimization strategies', 'Quality verification & testing'],
+    description:
+      'Expert guidance on the right paints, quantities, and procurement strategies to reduce waste and achieve optimal results. Stop guessing — let data and expertise drive every paint decision.',
     image: procurementImg,
   },
   {
-    id: 2, icon: Home,
+    id: 2,
+    number: '02',
+    badge: 'Residential',
     title: 'Residential Painting',
-    short: 'Premium interior and exterior painting for homes, with meticulous surface preparation and expert colour guidance.',
-    long: 'Our residential painting service delivers exceptional quality finishes for homes of all sizes. From comprehensive surface preparation to final inspection, every detail is managed with precision and care. We treat every home as if it were our own.',
-    features: ['Interior painting', 'Exterior painting', 'Colour consultation', 'Surface preparation', 'Quality inspection & handover'],
+    description:
+      'Premium interior and exterior painting for homes of all sizes. Meticulous surface preparation, expert colour guidance, and a final inspection before handover — every time.',
     image: residentialImg,
   },
   {
-    id: 3, icon: Building2,
+    id: 3,
+    number: '03',
+    badge: 'Commercial',
     title: 'Commercial Painting',
-    short: 'Large-scale commercial painting with minimal operational disruption and strict quality control throughout.',
-    long: 'We handle commercial painting projects with the professionalism and scale required by businesses. Our team works around your schedule to minimize disruption while delivering superior results that reflect well on your brand.',
-    features: ['Office buildings', 'Retail spaces', 'Industrial facilities', 'Schedule flexibility', 'Project management & reporting'],
+    description:
+      'Large-scale commercial painting with minimal operational disruption and strict quality control throughout. We work around your schedule so your business never misses a beat.',
     image: commercialImg,
   },
   {
-    id: 4, icon: Brush,
+    id: 4,
+    number: '04',
+    badge: 'Project Support',
     title: 'Project-Based Painting Support',
-    short: 'End-to-end painting supervision for construction projects, developers, and facility managers.',
-    long: 'For developers and construction managers, we provide dedicated painting supervision throughout the project lifecycle. We ensure quality standards are maintained at every phase, from primer to finish coat, and provide detailed progress reports.',
-    features: ['Full project supervision', 'Milestone inspections', 'Subcontractor management', 'Progress reporting', 'Snagging & defect resolution'],
+    description:
+      'End-to-end painting supervision for construction projects, developers, and facility managers. Milestone inspections, subcontractor management, and detailed progress reports included.',
     image: projectImg,
   },
   {
-    id: 5, icon: Layers,
+    id: 5,
+    number: '05',
+    badge: 'Preparation',
     title: 'Surface Preparation & Finishing',
-    short: 'Professional surface preparation — the critical foundation of every lasting, beautiful paint job.',
-    long: 'Great paint jobs begin with impeccable surface preparation. We specialize in wall repair, filling, sanding, priming, and all preparation work that ensures paint adheres correctly, looks perfect, and lasts for years without premature failure.',
-    features: ['Wall repair & filling', 'Sanding & smoothing', 'Priming & sealing', 'Skim coating', 'Texture application & matching'],
+    description:
+      'Scraping, sanding, crack filling, damp treatment, and priming. This foundational work is what separates durable finishes from short-lived ones — and it is a core competency we never skip.',
     image: prepImg,
   },
   {
-    id: 6, icon: Wrench,
+    id: 6,
+    number: '06',
+    badge: 'Assessment',
     title: 'Site Assessment & Paint Advisory',
-    short: 'Comprehensive on-site assessments to diagnose surface conditions and prescribe the optimal solution.',
-    long: 'Before any brush touches a wall, we assess your site thoroughly. Our diagnostic process identifies surface issues, environmental factors, and existing paint conditions to recommend the most effective treatment plan — saving you time and money.',
-    features: ['Surface condition diagnosis', 'Environmental assessment', 'Existing paint analysis', 'Written treatment plan', 'Cost-benefit advisory'],
+    description:
+      'Early-stage professional assessments to identify surface conditions, flag problem areas, and guide decisions that prevent costly execution mistakes before a single brush is lifted.',
     image: advisoryImg,
   },
 ];
 
-function ServiceRow({ service, index }) {
-  const [open, setOpen] = useState(false);
-
+function ServiceCard({ service, index }) {
   return (
-    <motion.div
-      style={{ borderTop: '1px solid var(--border)' }}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: '-30px' }}
-      transition={{ duration: 0.5, delay: index * 0.05 }}
+    <motion.article
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.55, delay: index * 0.07 }}
+      style={{
+        background: '#fff',
+        border: '1px solid var(--border)',
+        borderRadius: '1rem',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: '0 2px 12px rgba(30,30,28,0.06)',
+        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+      }}
+      whileHover={{ y: -4, boxShadow: '0 8px 32px rgba(30,30,28,0.12)' }}
     >
-      {/* Collapsed row */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full text-left"
-        style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '2rem', padding: '1.75rem 0', alignItems: 'center' }}
-        id={`service-row-${service.id}`}
-      >
-        <div style={{ display: 'grid', gridTemplateColumns: '2.5rem 1fr', gap: '2rem', alignItems: 'center' }}>
-          <span className="overline-accent" style={{ paddingTop: '2px' }}>
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          <h3
-            className="font-display"
-            style={{ fontSize: 'clamp(1.15rem,2vw,1.6rem)', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.2 }}
-          >
-            {service.title}
-          </h3>
-        </div>
-        <motion.div
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ duration: 0.25 }}
-          style={{ flexShrink: 0, color: open ? 'var(--accent)' : 'var(--text-muted)' }}
+      {/* Card body */}
+      <div style={{ padding: 'clamp(1.5rem, 5vw, 2rem)', flex: 1 }}>
+        {/* Number */}
+        <p
+          className="font-display"
+          style={{
+            fontSize: 'clamp(3rem, 8vw, 4rem)',
+            fontWeight: 300,
+            color: 'var(--accent)',
+            lineHeight: 1,
+            marginBottom: '1rem',
+            letterSpacing: '-0.02em',
+          }}
         >
-          <Plus size={18} strokeWidth={1.5} />
-        </motion.div>
-      </button>
+          {service.number}
+        </p>
 
-      {/* Expanded panel */}
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="panel"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            style={{ overflow: 'hidden' }}
-          >
-            <div
-              className="pb-12"
-              style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }}
-            >
-              {/* Left: text */}
-              <div style={{ paddingLeft: 'calc(2.5rem + 2rem)' }}>
-                <p className="body-editorial mb-6">{service.long}</p>
-                <ul className="space-y-2 mb-8">
-                  {service.features.map((f) => (
-                    <li
-                      key={f}
-                      style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}
-                    >
-                      <span style={{ width: '1.5rem', height: '1px', background: 'var(--accent)', flexShrink: 0, marginTop: '0.6rem' }} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="btn-ghost"
-                >
-                  Request This Service
-                </button>
-              </div>
+        {/* Title */}
+        <h3
+          style={{
+            fontSize: 'clamp(1.05rem, 3vw, 1.3rem)',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            lineHeight: 1.25,
+            marginBottom: '0.85rem',
+            letterSpacing: '-0.01em',
+          }}
+        >
+          {service.title}
+        </h3>
 
-              {/* Right: image */}
-              <div className="relative overflow-hidden" style={{ aspectRatio: '16/10', alignSelf: 'start' }}>
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  className="img-cover img-hover"
-                />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+        {/* Description */}
+        <p
+          style={{
+            fontSize: 'clamp(0.82rem, 2.2vw, 0.9rem)',
+            color: 'var(--text-secondary)',
+            lineHeight: 1.7,
+            marginBottom: '1.25rem',
+          }}
+        >
+          {service.description}
+        </p>
+
+        {/* Badge */}
+        <span
+          style={{
+            display: 'inline-block',
+            fontSize: '0.65rem',
+            fontWeight: 700,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: 'var(--accent)',
+            border: '1px solid var(--accent)',
+            borderRadius: '999px',
+            padding: '0.3rem 0.9rem',
+          }}
+        >
+          {service.badge}
+        </span>
+      </div>
+
+      {/* Image */}
+      <div
+        style={{
+          width: '100%',
+          aspectRatio: '16/9',
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}
+      >
+        <img
+          src={service.image}
+          alt={service.title}
+          loading="lazy"
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center top',
+            transition: 'transform 0.6s ease',
+            display: 'block',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
+          onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+        />
+      </div>
+    </motion.article>
   );
 }
 
 export default function Services() {
   return (
-    <section id="services" className="section-padding" style={{ background: 'var(--bg-primary)' }}>
+    <section
+      id="services"
+      className="section-padding"
+      style={{ background: 'var(--bg-primary)' }}
+    >
       <div className="container-site">
 
-        {/* Header */}
+        {/* ── Header ─────────────────────────────────────────────────────────── */}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16"
+          className="mb-14"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '1.5rem 4rem',
+            alignItems: 'end',
+          }}
         >
           <motion.div
-            className="lg:col-span-6"
             variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7 } } }}
           >
-            <div className="overline-row mb-6">
+            <div className="overline-row mb-5">
               <span className="overline">What We Do</span>
             </div>
             <h2 className="text-editorial-xl" style={{ color: 'var(--text-primary)' }}>
               Our Services
             </h2>
           </motion.div>
-          <motion.div
-            className="lg:col-span-5 lg:col-start-8 flex items-end"
+
+          <motion.p
+            className="body-editorial"
             variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.7, delay: 0.2 } } }}
+            style={{ maxWidth: '480px' }}
           >
-            <p className="body-editorial">
-              From residential homes to large-scale commercial developments, we deliver structured, supervised painting solutions tailored to every project.
-            </p>
-          </motion.div>
+            From residential homes to large-scale commercial developments, we deliver structured, supervised painting solutions tailored to every project.
+          </motion.p>
         </motion.div>
 
-        {/* Accordion rows */}
-        <div>
+        {/* ── Card Grid ──────────────────────────────────────────────────────── */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))',
+            gap: 'clamp(1rem, 3vw, 1.75rem)',
+          }}
+        >
           {services.map((s, i) => (
-            <ServiceRow key={s.id} service={s} index={i} />
+            <ServiceCard key={s.id} service={s} index={i} />
           ))}
-          <div className="rule" />
         </div>
+
       </div>
     </section>
   );
