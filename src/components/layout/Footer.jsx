@@ -158,8 +158,8 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {[
-                { icon: Phone,  text: '+233 55 000 0000',       href: 'tel:+233550000000' },
-                { icon: Mail,   text: 'info@ambiencevista.com', href: 'mailto:info@ambiencevista.com' },
+                { icon: Phone,  text: '+233 59 555 4461',       href: 'tel:+233595554461' },
+                { icon: Mail,   text: 'paint@ambiencevista.com', href: 'mailto:paint@ambiencevista.com' },
                 { icon: MapPin, text: 'Greater Accra, Ghana',   href: '#' },
               ].map(({ icon: Icon, text, href }) => (
                 <a

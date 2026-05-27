@@ -41,13 +41,45 @@ export default function Contact() {
     e.preventDefault();
     setStatus('loading');
     setErrorMsg('');
+
     try {
-      await submitContact(form);
-      setStatus('success');
-      setForm(initialForm);
+      // 1. Attempt to save to backend DB (fail silently / warning only so Web3Forms is not blocked)
+      try {
+        await submitContact(form);
+      } catch (dbErr) {
+        console.warn('Database contact log failed:', dbErr);
+      }
+
+      // 2. Submit to Web3Forms
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'YOUR_ACCESS_KEY_HERE',
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          service: form.service || 'General Enquiry',
+          message: form.message,
+          subject: `New Contact Submission from ${form.name}`,
+          from_name: 'Ambience Vista Website',
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setStatus('success');
+        setForm(initialForm);
+      } else {
+        throw new Error(result.message || 'Failed to submit form to Web3Forms.');
+      }
     } catch (err) {
+      console.error('Submission error:', err);
       setStatus('error');
-      setErrorMsg(err.response?.data?.message || 'Something went wrong. Please try again.');
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
     }
   };
 
@@ -98,12 +130,12 @@ export default function Contact() {
             {/* Contact items */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-10 mb-12">
               {[
-                { icon: Phone,  label: 'Phone',    value: '+233 55 000 0000',      href: 'tel:+233550000000'              },
-                { icon: Mail,   label: 'Email',    value: 'info@ambiencevista.com', href: 'mailto:info@ambiencevista.com'  },
-                { icon: MapPin, label: 'Location', value: 'Greater Accra, Ghana',   href: '#'                              },
-                { icon: Clock,  label: 'Hours',    value: 'Mon – Sat: 7am – 6pm',   href: '#'                              },
+                { icon: Phone, label: 'Phone', value: '+233 59 555 4461', href: 'tel:+233595554461' },
+                { icon: Mail, label: 'Email', value: 'paint@ambiencevista.com', href: 'mailto:paint@ambiencevista.com' },
+                { icon: MapPin, label: 'Location', value: 'Greater Accra, Ghana', href: '#' },
+                { icon: Clock, label: 'Hours', value: 'Mon – Sat: 7am – 6pm', href: '#' },
               ].map(({ icon: Icon, label, value, href }) => (
-                <div 
+                <div
                   key={label}
                   style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem' }}
                 >
@@ -128,7 +160,7 @@ export default function Contact() {
                 Request a free on-site assessment — we'll visit your site, diagnose the surface conditions, and recommend the most effective solution.
               </p>
               <a
-                href="tel:+233550000000"
+                href="tel:+233595554461"
                 className="btn-ghost-white"
                 style={{ padding: '0.75rem 1.5rem', fontSize: '0.68rem' }}
               >
@@ -199,7 +231,7 @@ export default function Contact() {
                     <input
                       id="contact-phone" name="phone" type="tel"
                       value={form.phone} onChange={handleChange}
-                      placeholder="+233 55 000 0000"
+                      placeholder="+233 59 555 4461"
                       style={inputStyle}
                       onFocus={e => e.target.style.borderBottomColor = 'var(--accent)'}
                       onBlur={e => e.target.style.borderBottomColor = 'var(--border-dark)'}

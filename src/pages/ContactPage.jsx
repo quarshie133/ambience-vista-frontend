@@ -23,8 +23,8 @@ const services = [
 const initialForm = { name: '', email: '', phone: '', service: '', message: '' };
 
 const contactDetails = [
-  { icon: Phone,  label: 'Call Us',       value: '+233 55 000 0000',       sub: 'Mon – Sat, 7am – 6pm',           href: 'tel:+233550000000'             },
-  { icon: Mail,   label: 'Email Us',      value: 'info@ambiencevista.com', sub: 'We reply within 1 business day', href: 'mailto:info@ambiencevista.com' },
+  { icon: Phone,  label: 'Call Us',       value: '+233 59 555 4461',       sub: 'Mon – Sat, 7am – 6pm',           href: 'tel:+233595554461'             },
+  { icon: Mail,   label: 'Email Us',      value: 'paint@ambiencevista.com', sub: 'We reply within 1 business day', href: 'mailto:paint@ambiencevista.com' },
   { icon: MapPin, label: 'Find Us',       value: 'Greater Accra, Ghana',   sub: 'Serving all districts',          href: '#'                             },
   { icon: Clock,  label: 'Working Hours', value: 'Mon – Sat: 7am – 6pm',  sub: 'Closed on Sundays',              href: '#'                             },
 ];
@@ -46,9 +46,49 @@ export default function ContactPage() {
 
   const handleChange = (e) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   const handleSubmit = async (e) => {
-    e.preventDefault(); setStatus('loading'); setErrorMsg('');
-    try { await submitContact(form); setStatus('success'); setForm(initialForm); }
-    catch (err) { setStatus('error'); setErrorMsg(err.response?.data?.message || 'Something went wrong. Please try again.'); }
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMsg('');
+
+    try {
+      // 1. Attempt to save to backend DB (fail silently / warning only so Web3Forms is not blocked)
+      try {
+        await submitContact(form);
+      } catch (dbErr) {
+        console.warn('Database contact log failed:', dbErr);
+      }
+
+      // 2. Submit to Web3Forms
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || 'YOUR_ACCESS_KEY_HERE',
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          service: form.service || 'General Enquiry',
+          message: form.message,
+          subject: `New Contact Submission from ${form.name}`,
+          from_name: 'Ambience Vista Website',
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setStatus('success');
+        setForm(initialForm);
+      } else {
+        throw new Error(result.message || 'Failed to submit form to Web3Forms.');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      setStatus('error');
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    }
   };
   const inputProps = (name) => ({
     style: { ...fieldStyle, borderBottomColor: focused === name ? 'var(--accent)' : 'rgba(30,30,28,0.15)' },
@@ -90,7 +130,7 @@ export default function ContactPage() {
                 <div className="overline-row" style={{ marginBottom: '1.5rem' }}><span className="overline">Start Here</span></div>
                 <h2 className="text-editorial-xl" style={{ color: 'var(--text-primary)', marginBottom: '1.25rem' }}>Ready to Transform Your Space?</h2>
                 <p className="body-editorial" style={{ marginBottom: '3rem' }}>Fill in the form and our team will reach out with a tailored plan for your project.</p>
-                {[{ icon: MessageSquare, title: 'Send a Message', desc: 'Use the form to describe your project in detail.' }, { icon: Phone, title: 'Prefer a Call?', desc: 'Ring us directly on +233 55 000 0000.' }, { icon: Calendar, title: 'Book an Assessment', desc: 'We visit your site and advise you — free of charge.' }].map(({ icon: Icon, title, desc }, i) => (
+                {[{ icon: MessageSquare, title: 'Send a Message', desc: 'Use the form to describe your project in detail.' }, { icon: Phone, title: 'Prefer a Call?', desc: 'Ring us directly on +233 59 555 4461.' }, { icon: Calendar, title: 'Book an Assessment', desc: 'We visit your site and advise you — free of charge.' }].map(({ icon: Icon, title, desc }, i) => (
                   <motion.div key={title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
                     style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', padding: '1.25rem 0', borderBottom: '1px solid var(--border)' }}>
                     <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'var(--accent-pale)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
@@ -108,7 +148,7 @@ export default function ContactPage() {
                   <p className="overline" style={{ color: 'var(--accent)', marginBottom: '0.75rem' }}>Free Service</p>
                   <p className="font-display" style={{ fontSize: '1.25rem', color: '#fff', fontStyle: 'italic', fontWeight: 300, lineHeight: 1.4, marginBottom: '0.75rem' }}>Not sure where to start?</p>
                   <p style={{ fontSize: '0.84rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: '1.5rem' }}>Request a free on-site assessment — we'll visit your space and guide you to the right solution.</p>
-                  <a href="tel:+233550000000" className="btn-ghost-white" style={{ padding: '0.75rem 1.5rem', fontSize: '0.68rem' }}>Call Us Now <ArrowRight size={13} /></a>
+                  <a href="tel:+233595554461" className="btn-ghost-white" style={{ padding: '0.75rem 1.5rem', fontSize: '0.68rem' }}>Call Us Now <ArrowRight size={13} /></a>
                 </motion.div>
               </motion.aside>
 
@@ -131,7 +171,7 @@ export default function ContactPage() {
                       <div><label className="overline" style={{ display: 'block', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Email Address *</label><input id="c-email" name="email" type="email" required value={form.email} onChange={handleChange} placeholder="your@email.com" {...inputProps('email')} /></div>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-                      <div><label className="overline" style={{ display: 'block', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Phone Number</label><input id="c-phone" name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+233 55 000 0000" {...inputProps('phone')} /></div>
+                      <div><label className="overline" style={{ display: 'block', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Phone Number</label><input id="c-phone" name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+233 59 555 4461" {...inputProps('phone')} /></div>
                       <div><label className="overline" style={{ display: 'block', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Service Needed</label><select id="c-service" name="service" value={form.service} onChange={handleChange} {...inputProps('service')} style={{ ...inputProps('service').style, cursor: 'pointer', appearance: 'none' }}><option value="">Select a service</option>{services.map(s => <option key={s} value={s}>{s}</option>)}</select></div>
                     </div>
                     <div style={{ marginBottom: '2.5rem' }}>
