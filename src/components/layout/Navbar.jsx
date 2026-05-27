@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import logo from '../../assets/logo.png';
 
-
 const navLinks = [
   { label: 'About',    to: '/about'    },
   { label: 'Services', to: '/services' },
@@ -15,33 +14,56 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled,  setScrolled]  = useState(false);
+  const [menuOpen,  setMenuOpen]  = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close drawer on route change
   useEffect(() => { setMenuOpen(false); }, [location]);
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   const isActive = (to) => location.pathname === to;
 
   return (
     <>
+      {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'navbar-blur' : 'bg-transparent'}`}
-        style={{ borderBottom: scrolled ? '1px solid var(--border)' : '1px solid rgba(255,255,255,0.08)', background: scrolled ? 'rgba(245,243,239,0.92)' : 'transparent' }}
+        style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0,
+          zIndex: 60,                       // above drawer (z-50)
+          height: '72px',
+          display: 'flex',
+          alignItems: 'center',
+          borderBottom: scrolled
+            ? '1px solid var(--border)'
+            : '1px solid rgba(255,255,255,0.08)',
+          background: scrolled
+            ? 'rgba(245,243,239,0.96)'
+            : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          transition: 'background 0.4s ease, border-color 0.4s ease',
+        }}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="container-site">
-          <div className="flex items-center justify-between" style={{ height: '72px' }}>
+        <div className="container-site" style={{ width: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
             {/* Logo */}
-            <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
               <img
                 src={logo}
                 alt="Ambience Vista"
@@ -55,14 +77,21 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-9">
+            <nav
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                gap: '2.25rem',
+              }}
+              className="lg-nav"
+            >
               {navLinks.map((link) => {
                 const active = isActive(link.to);
                 return (
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="overline transition-colors duration-300"
+                    className="overline"
                     style={{
                       color: active
                         ? (scrolled ? 'var(--accent)' : '#fff')
@@ -72,8 +101,12 @@ export default function Navbar() {
                       paddingBottom: '2px',
                       transition: 'color 0.3s, border-color 0.3s',
                     }}
-                    onMouseEnter={e => { if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-primary)' : '#fff'; }}
-                    onMouseLeave={e => { if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)'; }}
+                    onMouseEnter={e => {
+                      if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-primary)' : '#fff';
+                    }}
+                    onMouseLeave={e => {
+                      if (!active) e.currentTarget.style.color = scrolled ? 'var(--text-secondary)' : 'rgba(255,255,255,0.72)';
+                    }}
                   >
                     {link.label}
                   </Link>
@@ -81,59 +114,161 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* CTA */}
-            <div className="hidden lg:block">
-              <Link
-                to="/contact"
-                className={scrolled ? 'btn-ghost' : 'btn-ghost-white'}
-                style={{ padding: '0.625rem 1.5rem', fontSize: '0.68rem' }}
+            {/* Right side */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {/* Desktop CTA */}
+              <div className="lg-cta">
+                <Link
+                  to="/contact"
+                  className={scrolled ? 'btn-ghost' : 'btn-ghost-white'}
+                  style={{ padding: '0.625rem 1.5rem', fontSize: '0.68rem' }}
+                >
+                  Get in Touch
+                </Link>
+              </div>
+
+              {/* Mobile hamburger */}
+              <button
+                className="mobile-menu-btn"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={menuOpen}
+                style={{
+                  color: scrolled ? 'var(--text-primary)' : '#fff',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '0.375rem',
+                  zIndex: 70,          // always on top
+                  position: 'relative',
+                }}
               >
-                Get in Touch
-              </Link>
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={menuOpen ? 'close' : 'open'}
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                    style={{ display: 'flex' }}
+                  >
+                    {menuOpen
+                      ? <X size={22} strokeWidth={1.5} />
+                      : <Menu size={22} strokeWidth={1.5} />
+                    }
+                  </motion.span>
+                </AnimatePresence>
+              </button>
             </div>
 
-            {/* Mobile toggle */}
-            <button
-              className="lg:hidden p-2"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle menu"
-              style={{ color: scrolled ? 'var(--text-primary)' : '#fff' }}
-            >
-              {menuOpen ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
-            </button>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile drawer */}
+      {/* ── Mobile drawer ──────────────────────────────────────────────────── */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 50,           // below header (z-60) but above page
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
+            {/* Backdrop — clicking closes drawer */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'rgba(14,12,10,0.55)',
+                backdropFilter: 'blur(2px)',
+              }}
+              onClick={() => setMenuOpen(false)}
+            />
+
+            {/* Slide-in panel */}
             <motion.div
-              className="absolute top-0 right-0 bottom-0 w-80 flex flex-col"
-              style={{ background: 'var(--bg-primary)' }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: 'min(85vw, 340px)',
+                background: 'var(--bg-primary)',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '-8px 0 40px rgba(0,0,0,0.18)',
+                overflowY: 'auto',
+              }}
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              onClick={e => e.stopPropagation()}
             >
-              {/* Drawer header */}
-              <div className="flex items-center justify-between px-8 py-6" style={{ borderBottom: '1px solid var(--border)' }}>
-                <img src={logo} alt="Ambience Vista" style={{ height: '30px', width: 'auto' }} />
-                <button onClick={() => setMenuOpen(false)} style={{ color: 'var(--text-secondary)' }}>
+              {/* Drawer header — sits at top of panel, below the fixed navbar */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0 1.75rem',
+                  height: '72px',           // matches navbar height exactly
+                  borderBottom: '1px solid var(--border)',
+                  flexShrink: 0,
+                  background: 'var(--bg-primary)',
+                }}
+              >
+                {/* Logo — NO white filter, show natural colours */}
+                <Link to="/" onClick={() => setMenuOpen(false)}>
+                  <img
+                    src={logo}
+                    alt="Ambience Vista"
+                    style={{
+                      height: '30px',
+                      width: 'auto',
+                      filter: 'none',        // ← natural logo colour, not white
+                      display: 'block',
+                    }}
+                  />
+                </Link>
+
+                {/* Close button */}
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                  style={{
+                    color: 'var(--text-secondary)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '0.4rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderRadius: '0.375rem',
+                  }}
+                >
                   <X size={20} strokeWidth={1.5} />
                 </button>
               </div>
 
               {/* Nav links */}
-              <nav className="flex flex-col px-8 py-8 gap-1 flex-1">
+              <nav
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  padding: '1rem 0',
+                }}
+              >
                 {navLinks.map((link, i) => {
                   const active = isActive(link.to);
                   return (
@@ -141,21 +276,26 @@ export default function Navbar() {
                       key={link.label}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
+                      transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
                     >
                       <Link
                         to={link.to}
                         className="font-display"
                         style={{
-                          fontSize: '1.5rem',
+                          display: 'block',
+                          fontSize: 'clamp(1.4rem, 5vw, 1.75rem)',
                           fontStyle: 'italic',
                           fontWeight: 300,
                           color: active ? 'var(--accent)' : 'var(--text-primary)',
                           textDecoration: 'none',
-                          padding: '0.75rem 0',
+                          padding: '1rem 1.75rem',
                           borderBottom: '1px solid var(--border)',
-                          display: 'block',
+                          // Ensure the full width is tappable
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          WebkitTapHighlightColor: 'rgba(240,120,64,0.1)',
                         }}
+                        onClick={() => setMenuOpen(false)}
                       >
                         {link.label}
                       </Link>
@@ -164,10 +304,26 @@ export default function Navbar() {
                 })}
               </nav>
 
-              <div className="px-8 pb-10">
+              {/* Bottom CTA */}
+              <div
+                style={{
+                  padding: '1.5rem 1.75rem',
+                  borderTop: '1px solid var(--border)',
+                  flexShrink: 0,
+                  background: 'var(--bg-primary)',
+                }}
+              >
                 <Link
                   to="/contact"
-                  className="btn-primary w-full justify-center"
+                  className="btn-primary"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                    padding: '0.9rem 1.5rem',
+                    textAlign: 'center',
+                  }}
+                  onClick={() => setMenuOpen(false)}
                 >
                   Get in Touch
                 </Link>
@@ -176,6 +332,19 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── Inline responsive styles ─────────────────────────────────────────── */}
+      <style>{`
+        .lg-nav     { display: none !important; }
+        .lg-cta     { display: none !important; }
+        .mobile-menu-btn { display: flex !important; }
+
+        @media (min-width: 1024px) {
+          .lg-nav          { display: flex !important; }
+          .lg-cta          { display: block !important; }
+          .mobile-menu-btn { display: none !important; }
+        }
+      `}</style>
     </>
   );
 }
